@@ -50,7 +50,7 @@ const login = async (req, res) => {
     }
 
     try {
-        return res.status(200).json({ message: "You can login." });
+        return res.status(200).json({ message: "You can login.", token: generateJWT(existUser.id) });
     } catch (error) {
         console.log("ERROR WHILE LOGIN: ", error);
         return res.status(500).send({message: error});
@@ -83,7 +83,7 @@ const confirming = async (req, res) => {
 
 const profile = (req, res) => {
     const { veterinarian } = req;
-    res.status.json({ profile: veterinarian });
+    res.status(200).json({ profile: veterinarian });
 };
 
 const forgotPassword = async (req, res) => {
@@ -136,4 +136,12 @@ const newPassword = async (req, res) => {
     }
 };
 
-export { createUser, login , confirming, profile, forgotPassword, checkToken, newPassword }
+export { 
+         createUser,
+         login,
+         confirming,
+         profile,
+         forgotPassword,
+         checkToken,
+         newPassword
+        };

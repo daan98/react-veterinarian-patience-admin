@@ -1,13 +1,13 @@
 import express from 'express';
 import {
-    createUser,
-    login,
-    confirming,
-    profile,
-    forgotPassword,
-    checkToken,
-    newPassword
- } from '../controllers/veterinarian.controller.js';
+         createUser,
+         login,
+         confirming,
+         profile,
+         forgotPassword,
+         checkToken,
+         newPassword
+        } from '../controllers/veterinarian.controller.js';
 import checkAuth from '../middleware/auth.middleware.js';
 
 const router = express.Router();
