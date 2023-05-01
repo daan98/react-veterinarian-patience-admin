@@ -1,0 +1,116 @@
+import "./SignUp.style.scss";
+import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+import Alert from "../Alert/Alert"
+
+const SignUp = () => {
+
+    const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+    const [alert, setAlert] = useState({
+        message: '',
+        error: false
+    });
+
+    const handleOnClick = (e : any) => {
+        e.preventDefault();
+
+        console.log('Dentro de handleOnSubmit');
+
+        if([email, name, password, repeatPassword].includes('')) {
+            setAlert({
+                message: 'There are empty fields',
+                error: true 
+            });
+            return;
+        }
+    
+        if(password !== repeatPassword) {
+            setAlert({
+                message: 'Password are differences',
+                error: true 
+            });
+            return;
+        }
+    
+        if(password.length < 8) {
+            setAlert({
+                message: 'Password too sort',
+                error: true
+            });
+            return;
+        }
+    }
+
+    const { message } = alert;
+    return (
+        <>
+            { message &&  <Alert alert={alert} /> }
+            <div>
+                <h1 className="text-orange-600 font-bold text-6xl">
+                    Sign-up and manage your
+                    <span className="text-black"> patients</span>
+                </h1>
+            </div>
+
+            <form className="w-full">
+                <div className="my-5">
+                    <label className="uppercase block text-xl font-bold">
+                        Name
+                    </label>
+                    <input
+                        type="text"
+                        placeholder="Complete name..."
+                        className="border w-full p-3 mt-3 bg-gray-50 rounded-xl"
+                        onChange={ e => setName(e.target.value) } />
+                </div>
+
+                <div className="my-5">
+                    <label className="uppercase block text-xl font-bold">
+                        Email
+                    </label>
+                    <input
+                        type="email"
+                        placeholder="Email registration..."
+                        className="border w-full p-3 mt-3 bg-gray-50 rounded-xl"
+                        onChange={ e => setEmail(e.target.value)} />
+                </div>
+
+                <div className="my-5">
+                    <label className="uppercase block text-xl font-bold">
+                        Password
+                    </label>
+                    <input
+                        type="password"
+                        placeholder="Password..."
+                        className="border w-full p-3 mt-3 bg-gray-50 rounded-xl"
+                        onChange={ e => setPassword(e.target.value)} />
+                </div>
+
+                <div className="my-5">
+                    <label className="uppercase block text-xl font-bold">
+                        Repeat password
+                    </label>
+                    <input
+                        type="password"
+                        placeholder="Password..."
+                        className="border w-full p-3 mt-3 bg-gray-50 rounded-xl"
+                        onChange={ e => setRepeatPassword(e.target.value)} />
+                </div>
+
+                <div className="pb-5 lg:flex lg:justify-between">
+                    <p className='signUpBtn '>Already have an account?.. <NavLink className="text-sm text-slate-800 underline hover:text-orange-600" to={'/'}>Sing-in</NavLink></p>
+
+                    <p className='signUpBtn'><NavLink className="text-sm text-slate-800 hover:text-orange-600" to={'/forgot-password'}>Forgot my password</NavLink></p>
+                </div>
+                
+                <NavLink className="signInBtn text-xl font-bold rounded-xl px-3 py-2 w- bg-orange-500 hover:bg-orange-600" to={`/confirm-account/${20}`}
+                onClick={e => handleOnClick(e)}>Create account</NavLink>
+            </form>
+        </>
+    );
+};
+
+export default SignUp;
