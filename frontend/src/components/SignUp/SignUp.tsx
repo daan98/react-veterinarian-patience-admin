@@ -2,6 +2,7 @@ import "./SignUp.style.scss";
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Alert from "../Alert/Alert"
+import axios from "axios";
 
 const SignUp = () => {
 
@@ -14,7 +15,7 @@ const SignUp = () => {
         error: false
     });
 
-    const handleOnClick = (e : any) => {
+    const handleOnClick = async (e : any) => {
         e.preventDefault();
 
         console.log('Dentro de handleOnSubmit');
@@ -29,7 +30,7 @@ const SignUp = () => {
     
         if(password !== repeatPassword) {
             setAlert({
-                message: 'Password are differences',
+                message: 'Password are different',
                 error: true 
             });
             return;
@@ -42,18 +43,38 @@ const SignUp = () => {
             });
             return;
         }
+
+        setAlert({message: '', error: false});
+
+        try {
+            const url      = "http://localhost:4000/api/veterinarian/createVeterinarian";
+            const response = await axios.post(url, { name, email, password });
+            setAlert({
+                message: 'User created successfully.',
+                error: false
+            })
+            console.log('');
+        } catch (error : any) {
+            console.log("There was an error while creating veterinarian: ", error);
+            setAlert({
+                message: error.response.data.message,
+                error: true
+            })
+        }
     }
 
     const { message } = alert;
     return (
         <>
-            { message &&  <Alert alert={alert} /> }
             <div>
                 <h1 className="text-orange-600 font-bold text-6xl">
                     Sign-up and manage your
                     <span className="text-black"> patients</span>
                 </h1>
             </div>
+
+            <div className="mt-20 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white">
+            { message &&  <Alert alert={alert} /> }
 
             <form className="w-full">
                 <div className="my-5">
@@ -109,6 +130,7 @@ const SignUp = () => {
                 <NavLink className="signInBtn text-xl font-bold rounded-xl px-3 py-2 w- bg-orange-500 hover:bg-orange-600" to={`/confirm-account/${20}`}
                 onClick={e => handleOnClick(e)}>Create account</NavLink>
             </form>
+            </div>
         </>
     );
 };
