@@ -1,9 +1,10 @@
 import VeterinarianModel from "../models/Veterinarian.js";
 import generateJWT from "../helpers/createJwt.js";
 import createId from "../helpers/createId.js";
+import sendEmail from "../helpers/mailRegister.js";
 
 const createUser =  async (req, res) => {
-    const { email } = req.body;
+    const { email, name } = req.body;
 
     const existUser = await VeterinarianModel.findOne({email});
 
@@ -15,7 +16,14 @@ const createUser =  async (req, res) => {
 
     try {
         const veterinarian = new VeterinarianModel(req.body);
-        const newVeterinarian = await veterinarian.save()
+        const newVeterinarian = await veterinarian.save();
+        console.log('newVeterinarian: ', newVeterinarian);
+
+        sendEmail({
+            name,
+            email,
+            token: newVeterinarian.token
+        });
 
         res.json(newVeterinarian);
     } catch (error) {
