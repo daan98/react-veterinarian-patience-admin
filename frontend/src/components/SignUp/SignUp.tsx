@@ -30,7 +30,7 @@ const SignUp = () => {
     
         if(password !== repeatPassword) {
             setAlert({
-                message: 'Password are different',
+                message: 'Passwords are different',
                 error: true 
             });
             return;
@@ -38,7 +38,7 @@ const SignUp = () => {
     
         if(password.length < 8) {
             setAlert({
-                message: 'Password too sort',
+                message: 'Password must have 8 characters',
                 error: true
             });
             return;
