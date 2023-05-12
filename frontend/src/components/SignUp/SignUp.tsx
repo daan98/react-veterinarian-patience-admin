@@ -48,9 +48,9 @@ const SignUp = () => {
 
         try {
             const url      = "http://localhost:4000/api/veterinarian/createVeterinarian";
-            const response = await axios.post(url, { name, email, password });
+            await axios.post(url, { name, email, password });
             setAlert({
-                message: 'User created successfully.',
+                message: 'User created successfully, please check your email.',
                 error: false
             })
             console.log('');
