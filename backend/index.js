@@ -12,7 +12,7 @@ dotenv.config();
 
 connectDB();
 
-const acceptedDomains = ['http://localhost:3000', 'https://localhost:3000'];
+const acceptedDomains = [process.env.FRONTEND_URL];
 const corsOptions = {
     origin: function (origin, callback) {
         if (acceptedDomains.indexOf(origin) !== -1) {
@@ -24,6 +24,7 @@ const corsOptions = {
     },
 }
 
+app.use(cors(corsOptions));
 app.use('/api/veterinarian', veterinarianRoutes);
 app.use('/api/patient', patientRoutes);
 
