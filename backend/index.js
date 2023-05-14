@@ -12,7 +12,7 @@ dotenv.config();
 
 connectDB();
 
-const acceptedDomains = [process.env.FRONTEND_URL];
+const acceptedDomains = [process.env.FRONTEND_URL, 'http://localhost:4000/api'];
 const corsOptions = {
     origin: function (origin, callback) {
         if (acceptedDomains.indexOf(origin) !== -1) {

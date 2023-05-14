@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import Alert from "../Alert/Alert"
 import axios from "axios";
+import axiosClient from "../../config/axiosClient";
 
 const SignUp = () => {
 
@@ -48,7 +49,7 @@ const SignUp = () => {
 
         try {
             const url      = "http://localhost:4000/api/veterinarian/createVeterinarian";
-            await axios.post(url, { name, email, password });
+            await axiosClient.post(`/veterinarian/createVeterinarian`, { name, email, password });
             setAlert({
                 message: 'User created successfully, please check your email.',
                 error: false
@@ -57,7 +58,7 @@ const SignUp = () => {
         } catch (error : any) {
             console.log("There was an error while creating veterinarian: ", error);
             setAlert({
-                message: error.response.data.message,
+                message: error.response.data.message ? error.response.data.message : error.message,
                 error: true
             })
         }

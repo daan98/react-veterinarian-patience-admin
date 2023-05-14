@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, NavLink } from "react-router-dom";
 import axios from "axios";
 import Alert from "../Alert/Alert";
+import axiosClient from "../../config/axiosClient";
 
 const ConfirmAccount = () => {
 
@@ -15,7 +16,7 @@ const ConfirmAccount = () => {
         const ConfirmAccount = async () => {
             try {
                 const url = `http://localhost:4000/api/veterinarian/confirm/${token}`;
-                const { data } = await axios.get(url);
+                const { data } = await axiosClient.get(`/veterinarian/confirm/${token}`);
 
                 setConfirmedAccount(true);
                 setLoading(false);
@@ -23,11 +24,11 @@ const ConfirmAccount = () => {
                     message: data.message,
                     error: false
                 });
+                return;
             } catch (error : any) {
-                console.log('Error at ConfirmAccount: ', error);
                 setLoading(false);
                 setAlert({
-                    message: error.resposnse.data.message,
+                    message: error.response.data.message,
                     error: true
                 });
             }
@@ -48,6 +49,12 @@ const ConfirmAccount = () => {
             <div className="mt-20 md:mt-5 shadow-lg px-5 py-10 rounded-xl bg-white">
                 {!loading &&
                     <Alert alert={alert}  />
+                }
+
+                {confirmedAccount &&
+                    <div className="text-center">
+                        <NavLink className="text-sm text-slate-800 underline hover:text-orange-600" to={'/'}>Sing-in</NavLink>
+                    </div>
                 }
             </div>
         </>

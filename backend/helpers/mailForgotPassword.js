@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-const sendEmail = async (data) => {
+const forgotPassword = async (data) => {
     const { email, name, token } = data;
 
     let transporter = nodemailer.createTransport({
@@ -15,17 +15,16 @@ const sendEmail = async (data) => {
     let message  = {
         from: "mail@mail.com",
         to: email,
-        subject: "Confirm your email",
-        text: "Please confirm your email",
-        html: ` <p>Hello ${name}!! you are close to finish your sing up process</p>
-                <p>Please to confirm your account click the bottom below</p>
+        subject: "Restore password",
+        text: "Follow the instructions to restore the password",
+        html: ` <p>Hello ${name}!!, please, to restore your password click the bottom below</p>
                 
-                <a href="${process.env.EMAIL_URL}/${token}">Confirm account</a>
-                
+                <a href="${process.env.FRONTEND_URL}/forgot-password/${token}">Confirm account</a>
+
                 <p>If you are not the owner of this account, please ignore this message</p>`
     };
 
     const info = await transporter.sendMail(message);
 };
 
-export default sendEmail;
+export default forgotPassword;

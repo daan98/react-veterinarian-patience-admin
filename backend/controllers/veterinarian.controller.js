@@ -2,6 +2,7 @@ import VeterinarianModel from "../models/Veterinarian.js";
 import generateJWT from "../helpers/createJwt.js";
 import createId from "../helpers/createId.js";
 import sendEmail from "../helpers/mailRegister.js";
+import forgotPassword from "../helpers/mailForgotPassword.js";
 
 const createUser =  async (req, res) => {
     const { email, name } = req.body;
@@ -73,10 +74,11 @@ const confirming = async (req, res) => {
     const { token } = req.params;
 
     const findToken = await VeterinarianModel.findOne({token});
-    console.log(findToken);
+    console.log('findToken: ', findToken);
     if(!findToken){
-        const error = new Error('The user has no token o does not exist.');
-        return res.status(404).json({message: error.message});
+        const error = new Error('Token does not exist.');
+        console.log('confirming ERROR: ', error);
+        return res.status(400).json({message: error.message});
     }
     
     try {
@@ -85,7 +87,7 @@ const confirming = async (req, res) => {
         await findToken.save();
         return res.status(200).json({message: 'Confirmed account.'})
     } catch (error) {
-        res.status(404).json({message: error.message});
+        res.status(400).json({message: error.message});
     }
 };
 
@@ -107,8 +109,16 @@ const forgotPassword = async (req, res) => {
     try {
         veterinarian.token = createId();
         await veterinarian.save();
+
+        forgotPassword({
+            email,
+            name: veterinarian.name,
+            token: veterinarian.token
+        });
+
+        res.json({ message: "Check your email to know the rules." });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
