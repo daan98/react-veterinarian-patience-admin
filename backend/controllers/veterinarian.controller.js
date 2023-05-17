@@ -53,6 +53,7 @@ const login = async (req, res) => {
     if(existUser.CheckPassword) {
         // VALIDATE WITH JWT
         console.log({ token: generateJWT(existUser.id) });
+        res.json({ token: generateJWT(existUser.id) });
     } else {
         const error = new Error("The password is incorrect.");
         return res.status(401).json({ message: error.message });
