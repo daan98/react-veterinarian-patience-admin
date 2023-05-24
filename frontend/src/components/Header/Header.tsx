@@ -6,7 +6,7 @@ const Header = () => {
     const { logOut } = useAuth();
 
     return(
-        <header className="py-10 px-25 bg-orange-600 w-full">
+        <header className="py-10 px-10 bg-orange-600 w-full">
             <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center">
                 <h1 className="font-bold text-2xl text-center">
                     Administrador de pacientes de {''}

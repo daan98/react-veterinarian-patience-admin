@@ -18,7 +18,7 @@ const ProtectedRoute = () => {
             
             {
                 authentication?.id ? (
-                <main className="container mx-auto mt-10">
+                <main className="container mx-auto mt-10 px-10">
                     <Outlet/>
                 </main>
                 ) : <Navigate to={"/"} />
