@@ -16,6 +16,7 @@ const Login = () => {
                                                         });
     const emailRegExp             : RegExp    = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     const navigate                            = useNavigate();
+    const { setAuthentication }               = useAuth();
 
     // FOR RESIZE FUNCTIONALITY NEEDED FOR CENTER LABELS AND INPUTS WHEN WIDTH IS LOWER THAN 767PX
     useEffect(()=> {
@@ -27,7 +28,7 @@ const Login = () => {
     }, []);
 
     const onSigIn = async (e : any) => {
-        //e.preventDefault(); // use it only when handling submit event
+        e.preventDefault(); // use it only when handling submit event
         if([email, password].includes('')) {
             setAlert({
                 message: 'There are empty fields',
@@ -57,6 +58,7 @@ const Login = () => {
             const { data } = await axiosClient.post(url, { email, password });
             
             localStorage.setItem('vpa_token', data.token);
+            setAuthentication(data);
             navigate('/admin');
         } catch (error : any) {
             console.log('Error while trying to login: ', error);
@@ -83,7 +85,9 @@ const Login = () => {
                     <Alert alert={alert} />
                 }
 
-                <form className="w-full">
+                <form 
+                    className="w-full"
+                    onSubmit={onSigIn}>
                     <div className="my-5">
                         <label className="uppercase  block text-xl font-bold">
                             Email
@@ -110,11 +114,10 @@ const Login = () => {
 
                     <p className='signUpBtn pb-5'>Don't have an account?.. <NavLink className="text-sm text-slate-800 underline hover:text-orange-600" to={'/sing-up'}>Sing-up</NavLink></p>
 
-                    <NavLink 
-                        className="signInBtn text-xl font-bold rounded-xl px-3 py-2 w- bg-orange-500 hover:bg-orange-600" 
-                        to={`/confirm-account/${20}`}
-                        onClick={(e) => onSigIn(e)}>Sign-in</NavLink>
-
+                    <input
+                        type="submit"
+                        value="Sig in"
+                        className="signInBtn text-xl font-bold rounded-xl px-3 py-2 w- bg-orange-500 hover:bg-orange-600" />
                 </form>
             </div>
         </>
