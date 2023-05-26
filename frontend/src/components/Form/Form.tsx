@@ -1,12 +1,14 @@
 import { useState } from "react";
 import Alert from "../Alert/Alert";
+import usePatients from "../../hooks/usePatients";
 
 const Form = () => {
 
+    const { savePatient } = usePatients();
     const [petName, setPetName]       = useState('');
     const [ownerName, setOwnerName]   = useState('');
     const [ownerEmail, setOwnerEmail] = useState('');
-    const [date, setDate] : any       = useState(Date.now());
+    const [date, setDate] : any       = useState('');
     const [symptoms, setSymptoms]     = useState('');
     const [alert, setAlert]           = useState({
                                                     message: '',
@@ -21,13 +23,35 @@ const Form = () => {
                 message: 'All fields are needed',
                 error: true
             });
+            return;
         }
+
+        savePatient({
+            name: petName,
+            owner: ownerName,
+            email: ownerEmail,
+            appointmentDate: date,
+            symptom: symptoms
+        });
+
+        console.log('Se mandaron datos');
+        setAlert({
+            message: 'Saved correctly',
+            error: false
+        });
+
     };
 
     const { message } = alert;
     return(
         <>
-            <h1 className="text-center pb-2">Add your patients and {''} <span className="text-orange-600 font-bold">manage them</span></h1>
+            <h2 className="font-black text-3xl text-center">Patients Administrato</h2>
+
+            <p
+                className="text-xl mt-5 mb-10 text-center">
+                Add a ew patient {''}
+                <span className="text-orange-600 font-bold">and keep access to information</span>
+            </p>
 
             <form 
                 className="bg-white py-10 px-5 mb-10 lg:mb-10 shadow-md rounded-md"
@@ -125,7 +149,11 @@ const Form = () => {
                     />
                 </div>
 
-                <input type="button" className="bg-orange-600 w-full p-3 text-white uppercase font-bold hover:bg-orange-700 cursor-pointer transition-all-ease-in-out" value="Add Patient"  />
+                <input
+                    type="submit"
+                    className="bg-orange-600 w-full p-3 mt-5 text-white uppercase font-bold rounded-md hover:bg-orange-700 cursor-pointer transition-all-ease-in-out"
+                    value="Add Patient"
+                />
             </form>
 
             {message &&

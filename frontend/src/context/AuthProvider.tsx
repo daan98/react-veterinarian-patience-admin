@@ -10,8 +10,8 @@ const AuthContext = createContext<AuthContextInterface>({
                                                         });
 const AuthProvider = (props : PropsWithChildren<any>) => {
     const { children } = props;
-    const [authentication, setAuthentication] = useState({});
-    const [loading, setLoading]               = useState(true);
+    const [authentication, setAuthentication] = useState<any>({});
+    const [loading, setLoading]               = useState<boolean>(true);
 
     useEffect(() => {
         const authenticateUser = async () => {
