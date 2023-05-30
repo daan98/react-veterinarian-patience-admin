@@ -17,7 +17,7 @@ const ProtectedRoute = () => {
             <Header />
             
             {
-                authentication?.id ? (
+                authentication?.id || authentication.data?.profile?._id ? (
                 <main className="container mx-auto mt-10 px-10">
                     <Outlet/>
                 </main>

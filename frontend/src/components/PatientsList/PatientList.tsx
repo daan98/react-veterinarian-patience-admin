@@ -20,9 +20,12 @@ const PatientList = () => {
                         <span className="text-orange-600 font-bold">patients and appointments</span>
                     </p>
 
-                    { patients.map((patient) => {
-                        <Patient/>
-                    }) }
+                    { patients.map((patient) => (
+                        <Patient
+                            key={patient._id}
+                            patient={patient}
+                        />
+                    )) }
                 </>
             )
             :

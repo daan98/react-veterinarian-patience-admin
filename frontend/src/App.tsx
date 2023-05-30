@@ -11,6 +11,8 @@ import FoundError from './components/FoundError/FoundError';
 import NewPassword from './components/NewPassword/NewPassword';
 import ProtectedRoute from './layout/ProtectedRoute';
 import PatientsAdmin from './components/PatientsAdmin/PatientsAdmin';
+import EditProfile from './components/EditProfile/EditProfile';
+import ChangePassword from './components/ChangePassword/ChangePassword';
 
 
 function App() {
@@ -21,7 +23,7 @@ function App() {
     <>
     {// HEADER
     }
-      <main className={currentLocation.pathname != "/admin" ? 'container mx-auto grid grid-cols-2' : 'mx-auto' }>
+      <main className={!currentLocation.pathname.includes('admin')  ? 'container mx-auto grid grid-cols-2' : 'mx-auto' }>
         <Routes>
           <Route path="/confirm-account/:token" element={<ConfirmAccount />}></Route>
           <Route path='/forgot-password' element={<ForgotPassword />}></Route>
@@ -32,6 +34,8 @@ function App() {
 
           <Route path='/admin' element={<ProtectedRoute />}>
             <Route index element={<PatientsAdmin />}></Route>
+            <Route path='edit-profile' element={<EditProfile />} />
+            <Route path='change-password' element={<ChangePassword />} />
           </Route>
         </Routes>
       </main>

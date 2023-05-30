@@ -1,10 +1,15 @@
 interface PatientContextInterface {
-    patients    : Array<any>,
-    savePatient : any
+    patients      : Array<any>,
+    savePatient   : any,
+    updatePatient : any,
+    deletePatient : any,
+    patient       : any,
+    setPatient    : any
 }
 
 export default PatientContextInterface;
 
 /*
-** savePatient is a function
+** savePatient, updatePatient and deletePatient are functions
+** patient and setPatient are useState variables
 */

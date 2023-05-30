@@ -63,7 +63,7 @@ const Login = () => {
         } catch (error : any) {
             console.log('Error while trying to login: ', error);
             setAlert({
-                message: error.response.data.message ? error.response.data.message : error.message,
+                message: error.response ? error.response.data.message : error.message,
                 error: true
             });
         }

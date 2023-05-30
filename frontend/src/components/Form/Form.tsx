@@ -1,19 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Alert from "../Alert/Alert";
 import usePatients from "../../hooks/usePatients";
 
 const Form = () => {
 
-    const { savePatient } = usePatients();
+    const { savePatient, patient, updatePatient } = usePatients();
     const [petName, setPetName]       = useState('');
     const [ownerName, setOwnerName]   = useState('');
     const [ownerEmail, setOwnerEmail] = useState('');
     const [date, setDate] : any       = useState('');
     const [symptoms, setSymptoms]     = useState('');
+    const [id, setId]                 = useState(null);
     const [alert, setAlert]           = useState({
                                                     message: '',
                                                     error: false
                                                 });
+
+
+    useEffect(() => {
+        if (patient?.name) {
+            console.log('useEffect patient: ', patient);
+            setPetName(patient.name);
+            setOwnerName(patient.owner);
+            setOwnerEmail(patient.email);
+            const cuttedDate = patient.appointmentDate.slice(0, 10);
+            setDate(cuttedDate);
+            setSymptoms(patient.symptom);
+            setId(patient._id);
+        }
+    }, [patient]);
 
     const handleSubmit = (e : any) => {
         e.preventDefault();
@@ -23,26 +38,63 @@ const Form = () => {
                 message: 'All fields are needed',
                 error: true
             });
+
+            setTimeout(() => {
+                setAlert({
+                    message:'', 
+                    error: false
+                })
+            }, 3000);
             return;
         }
 
-        savePatient({
-            name: petName,
-            owner: ownerName,
-            email: ownerEmail,
-            appointmentDate: date,
-            symptom: symptoms
-        });
+        if (!id) {
+            savePatient({
+                name: petName,
+                owner: ownerName,
+                email: ownerEmail,
+                appointmentDate: date,
+                symptom: symptoms
+            });
 
-        console.log('Se mandaron datos');
-        setAlert({
-            message: 'Saved correctly',
-            error: false
-        });
+            setAlert({
+                message: 'Saved correctly',
+                error: false
+            });
+        } else {
+            console.log('date: ', date);
+            savePatient({
+                name: petName,
+                owner: ownerName,
+                email: ownerEmail,
+                appointmentDate: date,
+                symptom: symptoms
+            }, id);
 
+            setAlert({
+                message: 'Updated correctly',
+                error: false
+            });
+
+            setId(null);
+        }
+        
+        setPetName('');
+        setOwnerName('');
+        setOwnerEmail('');
+        setDate('');
+        setSymptoms('');
+        
+        setTimeout(() => {
+            setAlert({
+                message:'', 
+                error: false
+            })
+        }, 3000);
     };
 
     const { message } = alert;
+    console.log('id: ', id);
     return(
         <>
             <h2 className="font-black text-3xl text-center">Patients Administrato</h2>
@@ -152,7 +204,7 @@ const Form = () => {
                 <input
                     type="submit"
                     className="bg-orange-600 w-full p-3 mt-5 text-white uppercase font-bold rounded-md hover:bg-orange-700 cursor-pointer transition-all-ease-in-out"
-                    value="Add Patient"
+                    value={ id ? "Edit patient" : "Add Patient"}
                 />
             </form>
 
