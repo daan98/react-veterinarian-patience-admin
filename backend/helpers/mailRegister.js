@@ -20,7 +20,9 @@ const sendEmail = async (data) => {
         html: ` <p>Hello ${name}!! you are close to finish your sing up process</p>
                 <p>Please to confirm your account click the bottom below</p>
                 
-                <a href="${process.env.EMAIL_URL}/${token}">Confirm account</a>`
+                <a href="${process.env.EMAIL_URL}/${token}">Confirm account</a>
+                
+                <p>If you are not the owner of this account, please ignore this message</p>`
     };
 
     const info = await transporter.sendMail(message);
