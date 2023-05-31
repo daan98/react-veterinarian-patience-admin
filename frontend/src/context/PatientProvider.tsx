@@ -2,6 +2,8 @@ import { useState, useEffect, createContext, PropsWithChildren } from "react";
 import axiosClient from "../config/axiosClient";
 import PatientContextInterface from "../interfaces/PatientContextInterface";
 import useAuth from "../hooks/useAuth";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 const PatientContext = createContext<PatientContextInterface>({
                                                                 patients: [],
@@ -15,6 +17,7 @@ const PatientContext = createContext<PatientContextInterface>({
 export const PatientProvider = (props : PropsWithChildren<any>) => {
 
     const { children }                   = props;
+    const mySwal                         = withReactContent(Swal);
     const [patientList, setPatientList]  = useState<Array<any>>([]);
     const [patient, setPatient]          = useState({});
     const { authentication }             = useAuth();
@@ -80,18 +83,41 @@ export const PatientProvider = (props : PropsWithChildren<any>) => {
     const deletePatient = async (patientInfo : any) => {
         console.log('deletePatient: ', patientInfo);
 
-        try {
-            const url = `/patient/${patientInfo._id}`;
-            const { data } = await axiosClient.delete(url, config);
-            
-            const updatedPatientList = patientList.filter(currentPatient =>
-                currentPatient._id !== data.patientId
-            );
-            
-            setPatientList(updatedPatientList);
-        } catch (error) {
-            console.log("Error at deletePatient: ", error);
-        }
+        mySwal.fire({
+            title: `Do you really want to delete patient ${patientInfo.name}?`,
+            icon: 'question',
+            allowOutsideClick: true,
+            allowEscapeKey: true,
+            allowEnterKey: true,
+            keydownListenerCapture: true,
+            showDenyButton: true,
+            focusConfirm: false,
+            confirmButtonText: 'Yes',
+            confirmButtonColor: '#EA580C',
+            denyButtonColor: '#DC2626',
+            customClass: {
+                confirmButton: 'mx-5 px-5 py-1',
+                denyButton: 'px-5 py-1'
+            }
+        }).then(async result => {
+
+            if (!result.value) {
+                return;
+            } else {
+                try {
+                    const url = `/patient/${patientInfo._id}`;
+                    const { data } = await axiosClient.delete(url, config);
+                    
+                    const updatedPatientList = patientList.filter(currentPatient =>
+                        currentPatient._id !== data.patientId
+                    );
+        
+                    setPatientList(updatedPatientList);
+                } catch (error) {
+                    console.log("Error at deletePatient: ", error);
+                }
+            }
+        });
     };
 
     return(

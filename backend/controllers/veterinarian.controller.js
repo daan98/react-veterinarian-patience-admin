@@ -149,6 +149,41 @@ const newPassword = async (req, res) => {
   }
 };
 
+const updateProfile = async (req, res) => {
+  console.log("request info: ", req.body);
+  console.log("PARAMS: ", req.params);
+
+  const { email, name, phone, web } = req.body;
+  const { id } = req.params;
+  const veterinarian = await VeterinarianModel.findOne({ id });
+
+  if (!veterinarian) {
+    const error = new Error("The veterinarian doesn't exist");
+    return res.status(404).json({ message: error.message });
+  }
+
+  if (veterinarian.email !== email) {
+    const existEmail = await VeterinarianModel.findOne({ email });
+
+    if (existEmail) {
+      const error = new Error("This email is already been used");
+      return res.status(400).json({ message: error.message });
+    }
+  }
+
+  try {
+    veterinarian.name = name;
+    veterinarian.email = email || veterinarian.email; // Avoiding updating empty email
+    veterinarian.phone = phone;
+    veterinarian.web = web;
+
+    const updatedVeterinarian = await veterinarian.save();
+    res.status(200).json(updatedVeterinarian);
+  } catch (error) {
+    return res.status(403).json({ message: error });
+  }
+};
+
 export {
   createUser,
   login,
@@ -157,4 +192,5 @@ export {
   forgotPassword,
   checkToken,
   newPassword,
+  updateProfile,
 };

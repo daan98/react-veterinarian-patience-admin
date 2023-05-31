@@ -6,7 +6,8 @@ const AuthContext = createContext<AuthContextInterface>({
                                                             authentication: {},
                                                             setAuthentication: {},
                                                             loading: false,
-                                                            logOut: null
+                                                            logOut: null,
+                                                            updateProfile: null
                                                         });
 const AuthProvider = (props : PropsWithChildren<any>) => {
     const { children } = props;
@@ -18,7 +19,6 @@ const AuthProvider = (props : PropsWithChildren<any>) => {
             const token = localStorage.getItem('vpa_token');
             if(!token) {
                 setLoading(false);
-                console.log('authenticateUser loading', loading);
                 return;
             }
 
@@ -51,13 +51,42 @@ const AuthProvider = (props : PropsWithChildren<any>) => {
         setAuthentication({});
     };
 
+    const updateProfile = async (profile : any) => {
+        console.log('updateProfile: ', profile);
+
+        try {
+            const token = localStorage.getItem('vpa_token');
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            const url = `/veterinarian/profile/${profile._id}`
+            const { data } = await axiosClient.put(url, profile, config);
+            console.log('updateProfile: ', data);
+
+            return {
+                message: 'Information updated correctly',
+                error: false
+            };
+        } catch (error : any) {
+            console.log('Error at updateProfile: ', error);
+            return {
+                message: error.response.data.message ? error.response.data.message : 'The information cannot be updated',
+                error: true
+            };
+        }
+    }
+
     return(
         <AuthContext.Provider
             value={{
                 authentication,
                 setAuthentication,
                 loading,
-                logOut
+                logOut,
+                updateProfile
             }}>
             { children }
         </AuthContext.Provider>
