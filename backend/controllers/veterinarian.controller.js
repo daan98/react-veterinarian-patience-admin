@@ -150,9 +150,6 @@ const newPassword = async (req, res) => {
 };
 
 const updateProfile = async (req, res) => {
-  console.log("request info: ", req.body);
-  console.log("PARAMS: ", req.params);
-
   const { email, name, phone, web } = req.body;
   const { id } = req.params;
   const veterinarian = await VeterinarianModel.findOne({ id });
@@ -184,6 +181,39 @@ const updateProfile = async (req, res) => {
   }
 };
 
+const updatePassword = async (req, res) => {
+  console.log(req.veterinarian);
+  console.log(req.body);
+
+  // Reading data
+  const { _id } = req.veterinarian;
+  const { actualPassword, newPassword } = req.body;
+  const veterinarian = await VeterinarianModel.findById(_id);
+  // Check veterinarian exist
+  if (!veterinarian) {
+    const error = new Error("The veterinarian doesn't exist");
+    return res.status(404).json({ message: error.message });
+  }
+  // Check veterinarian password
+  const isActualPasswordCorrect = await veterinarian.CheckPassword(
+    actualPassword
+  );
+
+  if (isActualPasswordCorrect) {
+    // save new password
+    veterinarian.password = newPassword;
+    await veterinarian.save();
+    res.status(200).json({ message: "Password updated successfully." });
+  } else {
+    const error = new Error("The Actual password is incorrect.");
+    res.status(400).json({ message: error.message });
+  }
+  try {
+  } catch (error) {
+    return res.status(403).json({ message: error });
+  }
+};
+
 export {
   createUser,
   login,
@@ -193,4 +223,5 @@ export {
   checkToken,
   newPassword,
   updateProfile,
+  updatePassword,
 };

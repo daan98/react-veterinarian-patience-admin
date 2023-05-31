@@ -8,16 +8,12 @@ import useAuth from "../../hooks/useAuth";
 const EditProfile = () => {
 
     const mySwal                                = withReactContent(Swal);
-    const { authentication, updateProfile }     = useAuth()
-    const [userName, setUserName]               = useState<string>('');
-    const [website, setWebsite]                 = useState<string>('');
-    const [phoneNumber, setPhoneNumber]         = useState<string>('');
-    const [email, setEmail]                     = useState<string>('');
+    const { authentication, updateProfile }     = useAuth();
     const [profile, setProfile]                 = useState<any>({});
     const [initInfo, setInitInfo]               = useState<any>({});
     const emailRegExp      : RegExp             = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
     const websiteRegExp    : RegExp             = /(https?:\/\/)?(www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)|(https?:\/\/)?(www\.)?(?!ww)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
-    const onlyNumberRegexp : RegExp             = /^\d+$/
+    const onlyNumberRegexp : RegExp             = /^\d+$/;
     const [alert, setAlert]                     = useState<any>({
                                                                     message: '',
                                                                     error: false
@@ -25,8 +21,13 @@ const EditProfile = () => {
     console.log('authentication: ', authentication);
 
     useEffect(() => {
-        setProfile(authentication.data.profile);
-        setInitInfo(authentication.data.profile);
+        if (authentication.data?.profile) {
+            setProfile(authentication.data.profile);
+            setInitInfo(authentication.data.profile);
+        } else {
+            setProfile(authentication);
+            setInitInfo(authentication);
+        }
     }, [authentication]);
 
     const printAlert = (alertMessage : string, alertError : boolean) => {
@@ -48,7 +49,7 @@ const EditProfile = () => {
         const { email, name, web, phone } = profile;
 
         if (initInfo === profile) {
-            printAlert("There are no changes to save", true);
+            printAlert("There are no changes to save", false);
             return;
         }
 
@@ -62,7 +63,7 @@ const EditProfile = () => {
             return;
         }
 
-        if (web && !websiteRegExp.test(website)) {
+        if (web && !websiteRegExp.test(web)) {
             printAlert("Write a valid website URL", true);
             return;
         }
@@ -180,8 +181,6 @@ const EditProfile = () => {
                                 "hidden"
                             }
                         />
-
-                        
                     </form>
                     
                     { message ? 

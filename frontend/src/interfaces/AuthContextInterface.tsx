@@ -1,9 +1,10 @@
 interface AuthContextInterface {
-    authentication : any,
+    authentication    : any,
     setAuthentication : any,
-    loading : boolean,
-    logOut : any,
-    updateProfile : any 
+    loading           : boolean,
+    logOut            : any,
+    updateProfile     : any,
+    savePassword      : any
 };
 
 export default AuthContextInterface;
@@ -14,5 +15,6 @@ export default AuthContextInterface;
    ** setAuthentication is the variable used in the useState to give authentication a value
    ** logOut is a function
    ** updateProfile is a function
+   ** savePassword is a function
 
 */

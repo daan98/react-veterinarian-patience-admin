@@ -1,13 +1,15 @@
 import { useState, useEffect, createContext, PropsWithChildren } from "react";
 import axiosClient from "../config/axiosClient";
 import AuthContextInterface from "../interfaces/AuthContextInterface";
+import ChangePasswordInterface from "../interfaces/ChangePasswordInterface";
 
 const AuthContext = createContext<AuthContextInterface>({
                                                             authentication: {},
                                                             setAuthentication: {},
                                                             loading: false,
                                                             logOut: null,
-                                                            updateProfile: null
+                                                            updateProfile: null,
+                                                            savePassword: null
                                                         });
 const AuthProvider = (props : PropsWithChildren<any>) => {
     const { children } = props;
@@ -32,6 +34,7 @@ const AuthProvider = (props : PropsWithChildren<any>) => {
             try {
                 const url      = 'veterinarian/profile';
                 const { data } = await axiosClient.get(url, config);
+                console.log('DATA', data);
                 setAuthentication({ data });
                 setLoading(false);
             } catch (error : any) {
@@ -79,6 +82,42 @@ const AuthProvider = (props : PropsWithChildren<any>) => {
         }
     }
 
+    const savePassword = async (passwordInfo : ChangePasswordInterface) => {
+        console.log('savePassword: ', passwordInfo);
+        try {
+            const token = localStorage.getItem('vpa_token');
+            const config = {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            const url = `veterinarian/update-password`;
+            const { data } = await axiosClient.put(url, passwordInfo, config)
+
+            console.log('DATA: ', data);
+            return {
+                message: data.message,
+                error: false
+            };
+        } catch (error : any) {
+            console.log("Error at savePassword: ", error);
+            if (error.response.data.message) {
+                return {
+                    message: error.response.data.message,
+                    error: true
+                };
+            } else {
+                return {
+                    message: error.message,
+                    error: true
+                };
+            }
+        }
+    };
+
+    console.log('authentication: ', authentication);
+
     return(
         <AuthContext.Provider
             value={{
@@ -86,7 +125,8 @@ const AuthProvider = (props : PropsWithChildren<any>) => {
                 setAuthentication,
                 loading,
                 logOut,
-                updateProfile
+                updateProfile,
+                savePassword
             }}>
             { children }
         </AuthContext.Provider>
