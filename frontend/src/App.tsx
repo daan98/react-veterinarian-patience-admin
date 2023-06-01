@@ -17,8 +17,7 @@ import ChangePassword from './components/ChangePassword/ChangePassword';
 
 function App() {
 
-  const currentLocation = useLocation();
-  console.log('currentLocation: ', currentLocation); 
+  const currentLocation = useLocation(); 
   return (
     <>
     {// HEADER
