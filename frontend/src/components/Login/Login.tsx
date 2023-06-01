@@ -66,6 +66,13 @@ const Login = () => {
                 message: error.response ? error.response.data.message : error.message,
                 error: true
             });
+
+            if (!alert.message) {
+                setAlert({
+                    message: 'Unexpected error, please try again later.',
+                    error: true
+                });
+            }
         }
     }
 
