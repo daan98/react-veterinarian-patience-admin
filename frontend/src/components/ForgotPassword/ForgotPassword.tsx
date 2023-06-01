@@ -29,8 +29,6 @@ const ForgotPassword = () => {
 
         try {
             const { data } = await axiosClient.post('/veterinarian/forgot-password', email);
-            
-            console.log('forgotPassword data: ', data);
 
             setAlert({
                 message: data.message,

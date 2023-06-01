@@ -6,9 +6,7 @@ const Patient = ({patient} : any ) => {
     const { updatePatient, deletePatient } = usePatients();
 
     const getTimeFormat = (originalFormat : string) => {
-        console.log(originalFormat);
         const formattedDate = new Date(originalFormat.slice(0, 16));
-        console.log('formattedDate: ', formattedDate)
         return new Intl.DateTimeFormat('en-US', {dateStyle: 'long'}).format(formattedDate);
     };
 

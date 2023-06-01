@@ -76,7 +76,6 @@ const Login = () => {
         }
     }
 
-    console.log("width", window.screen.width.valueOf());
     const { message } = alert;
     return (
         <>

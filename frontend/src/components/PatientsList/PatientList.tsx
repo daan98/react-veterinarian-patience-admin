@@ -5,7 +5,6 @@ import Patient from "../Patient/Patient";
 const PatientList = () => {
 
     const { patients } = usePatients();
-    console.log('patients: ', patients);
 
     return(
         <>

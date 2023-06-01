@@ -19,7 +19,6 @@ const Form = () => {
 
     useEffect(() => {
         if (patient?.name) {
-            console.log('useEffect patient: ', patient);
             setPetName(patient.name);
             setOwnerName(patient.owner);
             setOwnerEmail(patient.email);
@@ -62,7 +61,6 @@ const Form = () => {
                 error: false
             });
         } else {
-            console.log('date: ', date);
             savePatient({
                 name: petName,
                 owner: ownerName,
@@ -94,7 +92,6 @@ const Form = () => {
     };
 
     const { message } = alert;
-    console.log('id: ', id);
     return(
         <>
             <h2 className="font-black text-3xl text-center">Patients Administrato</h2>

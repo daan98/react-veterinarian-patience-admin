@@ -18,7 +18,6 @@ const EditProfile = () => {
                                                                     message: '',
                                                                     error: false
                                                                 });
-    console.log('authentication: ', authentication);
 
     useEffect(() => {
         if (authentication.data?.profile) {

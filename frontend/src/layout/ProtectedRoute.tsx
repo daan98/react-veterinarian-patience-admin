@@ -6,7 +6,6 @@ import Footer from "../components/Footer/Footer";
 const ProtectedRoute = () => {
     
     const { authentication, loading } = useAuth();
-    console.log('Protected route: ', authentication, loading);
 
     if(loading) {
         return <><p>Loading...</p></>;

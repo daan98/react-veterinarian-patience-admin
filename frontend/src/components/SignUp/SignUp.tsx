@@ -19,8 +19,6 @@ const SignUp = () => {
     const handleOnClick = async (e : any) => {
         e.preventDefault();
 
-        console.log('Dentro de handleOnSubmit');
-
         if([email, name, password, repeatPassword].includes('')) {
             setAlert({
                 message: 'There are empty fields',
@@ -53,14 +51,20 @@ const SignUp = () => {
             setAlert({
                 message: 'User created successfully, please check your email.',
                 error: false
-            })
-            console.log('');
+            });
         } catch (error : any) {
             console.log("There was an error while creating veterinarian: ", error);
             setAlert({
                 message: error.response.data.message ? error.response.data.message : error.message,
                 error: true
-            })
+            });
+
+            if(!alert.message) {
+                setAlert({
+                    message: "Error while creating veterinarian",
+                    error: true
+                });
+            }
         }
     }
 

@@ -34,16 +34,14 @@ const AuthProvider = (props : PropsWithChildren<any>) => {
             try {
                 const url      = 'veterinarian/profile';
                 const { data } = await axiosClient.get(url, config);
-                console.log('DATA', data);
                 setAuthentication({ data });
                 setLoading(false);
             } catch (error : any) {
-                console.log('Error: ', error.response.data.message ? error.response.data.message : error.message);
+                console.log('Error at authenticateUser: ', error);
                 setAuthentication({});
             }
 
             setLoading(false);
-            console.log('authenticateUser loading', loading);
         };
 
         authenticateUser();
@@ -55,7 +53,6 @@ const AuthProvider = (props : PropsWithChildren<any>) => {
     };
 
     const updateProfile = async (profile : any) => {
-        console.log('updateProfile: ', profile);
 
         try {
             const token = localStorage.getItem('vpa_token');
@@ -67,7 +64,6 @@ const AuthProvider = (props : PropsWithChildren<any>) => {
             };
             const url = `/veterinarian/profile/${profile._id}`
             const { data } = await axiosClient.put(url, profile, config);
-            console.log('updateProfile: ', data);
 
             return {
                 message: 'Information updated correctly',
@@ -83,7 +79,6 @@ const AuthProvider = (props : PropsWithChildren<any>) => {
     }
 
     const savePassword = async (passwordInfo : ChangePasswordInterface) => {
-        console.log('savePassword: ', passwordInfo);
         try {
             const token = localStorage.getItem('vpa_token');
             const config = {
@@ -95,7 +90,6 @@ const AuthProvider = (props : PropsWithChildren<any>) => {
             const url = `veterinarian/update-password`;
             const { data } = await axiosClient.put(url, passwordInfo, config)
 
-            console.log('DATA: ', data);
             return {
                 message: data.message,
                 error: false
@@ -115,8 +109,6 @@ const AuthProvider = (props : PropsWithChildren<any>) => {
             }
         }
     };
-
-    console.log('authentication: ', authentication);
 
     return(
         <AuthContext.Provider
