@@ -15,16 +15,17 @@ connectDB();
 const acceptedDomains = [process.env.FRONTEND_URL, "http://localhost:4000/api"];
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log("origin: ", origin);
     if (acceptedDomains.indexOf(origin) !== -1) {
       // request origin is accepted
-      callback(null, true);
+      // callback(null, true);
     } else {
       callback(new Error("You have no access due to CORS."));
     }
   },
 };
 
-app.use(cors(corsOptions));
+app.use(cors);
 app.use("/api/veterinarian", veterinarianRoutes);
 app.use("/api/patient", patientRoutes);
 
