@@ -1,6 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  "type": "module",
   "description": "backend for the veterinarian patience administration project",
   "main": "index.js",
   "scripts": {
